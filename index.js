@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const fs = require('fs');
 const Discord = require('discord.js');
+const fetch = require('node-fetch');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -21,7 +22,19 @@ client.on('ready', () => {
 client.login(process.env.DISCORD_TOKEN);
 const prefix = process.env.PREFIX;
 
+function react(msg){
+	if(msg.content.toLowerCase().includes('japonais')){
+		msg.react('🏣');
+		msg.react('🏯');
+		msg.react('🎎');
+		msg.react('🈲');
+		msg.react('🈵');
+		msg.react('👺');
+	}
+}
+
 client.on('message', msg => {
+	react(msg);
 	if(!msg.content.startsWith(prefix) || msg.author.bot) return;
 
 	const args = msg.content.slice(prefix.length).split(/ +/);
