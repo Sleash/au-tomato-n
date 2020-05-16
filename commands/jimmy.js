@@ -1,6 +1,8 @@
 const Discord = require('discord.js'); 
 const fetch = require('node-fetch');
 
+const utils = require('../utils.js');
+
 module.exports = {
 	name: 'jimmy',
 	aliases: ['japojuif'],
@@ -19,13 +21,7 @@ module.exports = {
 			if(ind === -1) break;
 			const word = rsplit[ind+1].trim().replace( /<\/?span>/g , '');
 			ind = rsplit.findIndex( (s,i) => i > ind && s.trim().startsWith("<div class='meanings-wrapper'>") );
-			const def = rsplit[ind]
-				.replace( /Read more/g , '')
-				.replace( /<\/div>/g , '\n')
-				.replace( /&#8203/g , '\u200b')
-				.replace( /&quot;/g , '"')
-				.replace( /<[^>]*>/g , '');
-			console.log(`https://jisho.org/word/${word}`);
+			const def = utils.convertFromHTML(rsplit[ind].replace( /Read more/g , ''));
 			const emb = new Discord.MessageEmbed()
 				.setColor('#FF0000')
 				.setTitle(word)

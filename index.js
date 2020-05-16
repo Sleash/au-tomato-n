@@ -23,7 +23,7 @@ client.login(process.env.DISCORD_TOKEN);
 const prefix = process.env.PREFIX;
 
 function japoreact(msg){
-	if(msg.content.toLowerCase().includes('japonais')){
+	if(msg.content.toLowerCase().includes('jap')){
 		msg.react('🏣');
 		msg.react('🏯');
 		msg.react('🎎');

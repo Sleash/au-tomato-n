@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const querystring = require('querystring');
 
-const trim = (str, max) => ((str.length > max) ? `${str.slice(0, max-3)}...` : str);
+const utils = require('../utils.js');
 
 module.exports = {
 	name: 'urbandict',
@@ -22,8 +22,8 @@ module.exports = {
 			.setTitle(answer.word)
 			.setURL(answer.permalink)
 			.addFields(
-				{name: 'Definition', value: trim(answer.definition, 1024) },
-				{name: 'Example', value: trim(answer.example, 1024) },
+				{name: 'Definition', value: utils.trim(answer.definition, 1024) },
+				{name: 'Example', value: utils.trim(answer.example, 1024) },
 				{name: 'Rating', value: `${answer.thumbs_up} 👍\t${answer.thumbs_down} 👎`}
 			);
 
