@@ -5,9 +5,15 @@ const md5 = require('md5');
 
 class RealmAPI{
 	constructor(){
-		this.devId = process.env.RR_DEVID;
-		this.authKey = process.env.RR_AUTHKEY;
-		this.endpoint = "http://api.realmroyale.com/realmapi.svc"
+		this._devId = process.env.RR_DEVID;
+		this._authKey = process.env.RR_AUTHKEY;
+		this._endpoint = "http://api.realmroyale.com/realmapi.svc";
+
+		this.QUEUE = {
+			Solo: 474,
+			Duo: 475,
+			Quad: 476
+		};
 	}
 	
 	//Internal methods
@@ -15,13 +21,13 @@ class RealmAPI{
 		return moment.utc().format('YYYYMMDDHHmmss');
 	}
 	_generateSignature(method){
-		return md5(`${this.devId}${method}${this.authKey}${this._getTimestamp()}`);
+		return md5(`${this._devId}${method.toLowerCase()}${this._authKey}${this._getTimestamp()}`);
 	}
 	_generateURL(method){
-		return `${this.endpoint}/${method}json/${this.devId}/${this._generateSignature(method)}`;
+		return `${this.endpoint}/${method}json/${this._devId}/${this._generateSignature(method)}`;
 	}
 	_generateURLwSession(method){
-		return `${this._generateURL(method)}/${this.sessionId}/${this.getTimestamp()}`;
+		return `${this._generateURL(method)}/${this._sessionId}/${this._getTimestamp()}`;
 	}
 	_httpRequest(url){
 		const r = fetch(url)
@@ -29,16 +35,66 @@ class RealmAPI{
 		return r;
 	}
 	
-	//Public methods
+	//Public generic methods
+	ping(){
+		const uri = `${this.endpoint}/pingjson`;
+		return this._httpRequest(uri);
+	}
 	async createSession(){
 		const uri = `${this._generateURL('createsession')}/${this._getTimestamp()}`;
 		const resJSON = await this._httpRequest(uri);
 		if(resJSON.ret_msg.toLowerCase() === 'approved')
-			this.sessionId = resJSON.session_id;
+			this._sessionId = resJSON.session_id;
 		return resJSON;
 	}
-	ping(){
-		const uri = `${this.endpoint}/pingjson`;
+	testSession(){
+		const uri = this._generateURLwSession('testsession');
+		return this._httpRequest(uri);
+	}
+	getDataUsed(){
+		const uri = this._generateURLwSession('getdataused');
+		return this._httpRequest(uri);
+	}
+	getHirezServerStatus(){
+		const uri = this._generateURLwSession('gethirezserverstatus');
+		return this._httpRequest(uri);
+	}
+	getPatchInfo(){
+		const uri = this._generateURLwSession('getpatchinfo');
+		return this._httpRequest(uri);
+	}
+
+	//Public specific methods
+	getLeaderboard(queue, criteria){
+		const uri = `${this._generateURLwSession('getleaderboard')}/${queue}/${criteria}`;
+		return this._httpRequest(uri);
+	}
+	getMatchDetails(matchId){
+		const uri = `${this._generateURLwSession('getmatchdetails')}/${matchId}`;
+		return this._httpRequest(uri);
+	}
+	getMatchIDsByQueue(queue, date, hour){
+		const uri = `${this._generateURLwSession('getmatchidsbyqueue')}/${queue}/${date}/${hour}`;
+		return this._httpRequest(uri);
+	}
+	getPlayer(player, platform){
+		const uri = `${this._generateURLwSession('getplayer')}/${player}/${platform}`;
+		return this._httpRequest(uri);
+	}
+	getPlayerMatchHistory(player){
+		const uri = `${this._generateURLwSession('getplayermatchhistory')}/${player}`;
+		return this._httpRequest(uri);
+	}
+	getPlayerStats(player){
+		const uri = `${this._generateURLwSession('getplayerstats')}/${player}`;
+		return this._httpRequest(uri);
+	}
+	getPlayerStatus(player){
+		const uri = `${this._generateURLwSession('getplayerstatus')}/${player}`;
+		return this._httpRequest(uri);
+	}
+	searchPlayers(player){
+		const uri = `${this._generateURLwSession('searchplayers')}/${player}`;
 		return this._httpRequest(uri);
 	}
 }
