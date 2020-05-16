@@ -22,7 +22,7 @@ client.on('ready', () => {
 client.login(process.env.DISCORD_TOKEN);
 const prefix = process.env.PREFIX;
 
-function react(msg){
+function japoreact(msg){
 	if(msg.content.toLowerCase().includes('japonais')){
 		msg.react('🏣');
 		msg.react('🏯');
@@ -34,7 +34,7 @@ function react(msg){
 }
 
 client.on('message', msg => {
-	react(msg);
+	japoreact(msg);
 	if(!msg.content.startsWith(prefix) || msg.author.bot) return;
 
 	const args = msg.content.slice(prefix.length).split(/ +/);
@@ -53,23 +53,7 @@ client.on('message', msg => {
 		return msg.channel.send(reply);
 	}
 
-	if(!cooldowns.has(command.name))
-		cooldowns.set(command.name, new Discord.Collection());
-
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);	
-	const cooldownAmount = (command.cooldown || 5) * 1000;
-
-	if(timestamps.has(msg.author.id)){
-		const expiration = timestamps.get(msg.author.id) + cooldownAmount;
-		if(now < expiration){
-			const timeLeft = (expiration - now) / 1000;
-			return msg.channel.send(`You need to wait ${timeLeft.toFixed(1)} seconds before reusing the \`${command.name}\` command.`);
-		}
-	}
-
-	timestamps.set(msg.author.id, now);
-	setTimeout( () => timestamps.delete(msg.author.id), cooldownAmount);
+	if(cooldownsEnabled() && !cooldownsHandler(msg, command)) return;
 
 	try{
 		command.execute(msg, args);
@@ -78,3 +62,29 @@ client.on('message', msg => {
 		msg.reply('there was an error trying to execute that command !');
 	}
 });
+
+function cooldownsEnabled(){
+	return ['on', 'true', 'enabled'].includes(process.env.COOLDOWNS);
+}
+
+function cooldownsHandler(msg, command){
+	if(!cooldowns.has(command.name))
+		cooldowns.set(command.name, new Discord.Collection());
+
+	const now = Date.now();
+	const timestamps = cooldowns.get(command.name);	
+	const cooldownAmount = (command.cooldown || process.env.DEFAULT_COOLDOWN) * 1000;
+
+	if(timestamps.has(msg.author.id)){
+		const expiration = timestamps.get(msg.author.id) + cooldownAmount;
+		if(now < expiration){
+			const timeLeft = (expiration - now) / 1000;
+			msg.channel.send(`You need to wait ${timeLeft.toFixed(1)} seconds before reusing the \`${command.name}\` command.`);
+			return false;
+		}
+	}
+
+	timestamps.set(msg.author.id, now);
+	setTimeout( () => timestamps.delete(msg.author.id), cooldownAmount);
+	return true;
+}

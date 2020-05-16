@@ -24,7 +24,7 @@ class RealmAPI{
 		return md5(`${this._devId}${method.toLowerCase()}${this._authKey}${this._getTimestamp()}`);
 	}
 	_generateURL(method){
-		return `${this.endpoint}/${method}json/${this._devId}/${this._generateSignature(method)}`;
+		return `${this._endpoint}/${method}json/${this._devId}/${this._generateSignature(method)}`;
 	}
 	_generateURLwSession(method){
 		return `${this._generateURL(method)}/${this._sessionId}/${this._getTimestamp()}`;
@@ -37,7 +37,7 @@ class RealmAPI{
 	
 	//Public generic methods
 	ping(){
-		const uri = `${this.endpoint}/pingjson`;
+		const uri = `${this._endpoint}/pingjson`;
 		return this._httpRequest(uri);
 	}
 	async createSession(){
