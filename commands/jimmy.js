@@ -12,7 +12,7 @@ module.exports = {
 		if(isNaN(nb)) nb = 1;
 		else args.shift();
 
-		const r = await fetch(`https://jisho.org/search/${args.join(' ')}`).then(res => res.text());
+		const r = await fetch(`https://jisho.org/search/${encodeURIComponent(args.join(' '))}`).then(res => res.text());
 		const rsplit = r.split('\n');
 		let ind = 0;
 		let ri = 0;
