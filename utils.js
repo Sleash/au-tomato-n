@@ -13,3 +13,5 @@ exports.convertFromHTML = str => (str
 exports.randInt = i => Math.floor(Math.random() * Math.floor(i));
 
 exports.prob = (num, den) => (num > exports.randInt(den));
+
+exports.pad2 = n => (`0${n}`.slice(-2));

@@ -6,6 +6,7 @@ const utils = require('../utils.js');
 module.exports = {
 	name: 'jimmy',
 	aliases: ['japojuif'],
+	usage: '[number of results] <term to search for>...',
 	args: true,
 	async execute(msg, args){
 		let nb = parseInt(args[0], 10);
