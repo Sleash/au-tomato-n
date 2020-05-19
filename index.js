@@ -4,7 +4,12 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 
-const client = new Discord.Client();
+const client = new Discord.Client(
+	{presence:
+		{activity:
+			{name: 'Realm Royale Koustoums'}
+		}
+	});
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));

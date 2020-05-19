@@ -4,6 +4,8 @@ const moment = require('moment');
 
 const utils = require('../utils.js');
 
+moment.locale('fr', {weekdays: 'Dimanche_Lundi_Mardi_Mercredi_Jeudi_Vendredi_Samedi'.split('_')});
+
 const currentDaystamp = () => (moment().format('X') % 86400 + 60 * moment().utcOffset());
 const currentMillistamp = () =>(parseInt(moment().format('x')) + 60000 * moment().utcOffset());
 
@@ -52,7 +54,8 @@ async function getArret(msg, ligne, arret, color){
 			.setColor(color)
 			.setTitle(`${ligne} \u2192 ${arretData[0].pattern.lastStopName}`)
 			.setDescription(`${hor.join('\n')}`)
-			.setAuthor(`${arretData[0].times[0].stopId} ${arretData[0].times[0].stopName}`);
+			.setAuthor(`${arretData[0].times[0].stopId} ${arretData[0].times[0].stopName}`)
+			.setFooter(`${moment().format('dddd DD-MM-YYYY HH:mm:ss')}`);
 		msg.channel.send(emb);
 	}
 }

@@ -24,10 +24,9 @@ module.exports = {
 		const emb = new Discord.MessageEmbed()
 			.setColor('#0000FF')
 			.setTitle(r.term)
-			.addFields(
-				{name: "Words", value: utils.trim(rwords.join('\n'), 1024)},
-				{name: "Sentences", value: utils.trim(rsent.join('\n'), 1024)}
-			);
+			.addField("Words", utils.trim(rwords.join('\n'), 1024));
+		if(rsent.length)
+			emb.addField("Sentences", utils.trim(rsent.join('\n'), 1024));
 		msg.channel.send(emb);
 	}
 }
