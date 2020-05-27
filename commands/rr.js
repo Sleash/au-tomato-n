@@ -1,21 +1,20 @@
-const {RealmAPI} = require('../realm.js');
-
-const realmAPI = new RealmAPI();
+const Discord = require('discord.js');
 
 module.exports = {
 	name: 'rr',
-	aliases: ['realm'],
 	args: true,
 	async execute(msg, args){
-		
-		if(args[0] === 'ping'){
-			const r = await realmAPI.ping();
-			msg.channel.send(JSON.stringify(r));
-		}
-		else if(args[0] === 'cs'){
-			const r = await realmAPI.createSession();
-			msg.channel.send(JSON.stringify(r));
-		}
+		const command = args.shift();
+		if(!command.startsWith('&')) return;
 
+		const {realmAPI} = msg.client;
+
+		if(command === '&gsid') return msg.channel.send(realmAPI._sessionId || 'undefined');
+		if(command === '&ssid') return realmAPI._sessionId = args[0];
+		
+		const r = await realmAPI.request(command.slice(1), args);
+		console.log(r);
+		if(r.teams)
+			for(q of r.teams) console.log(q.players);
 	}
 }

@@ -40,11 +40,22 @@ class RealmAPI{
 		const uri = `${this._endpoint}/pingjson`;
 		return this._httpRequest(uri);
 	}
+	request(req, args){
+		if(this.sessionExpired())
+			this.createSession();
+		return this[req](...args);
+	}
+	sessionExpired(){
+		return !this._sessionId || !this._sessionEnd || !this._sessionEnd.isValid() || moment.utc().isAfter(this._sessionEnd);
+	}
 	async createSession(){
 		const uri = `${this._generateURL('createsession')}/${this._getTimestamp()}`;
 		const resJSON = await this._httpRequest(uri);
-		if(resJSON.ret_msg.toLowerCase() === 'approved')
+		if(resJSON.ret_msg.toLowerCase() === 'approved'){
 			this._sessionId = resJSON.session_id;
+			this._sessionEnd = moment.utc().add(15, 'm');
+			console.log(`Created Realm API session with id ${this._sessionId}.`);
+		}
 		return resJSON;
 	}
 	testSession(){
@@ -93,7 +104,8 @@ class RealmAPI{
 		const uri = `${this._generateURLwSession('getplayerstatus')}/${player}`;
 		return this._httpRequest(uri);
 	}
-	searchPlayers(player){
+	searchPlayers(...aplayer){
+		const player = aplayer.join(' ');
 		const uri = `${this._generateURLwSession('searchplayers')}/${player}`;
 		return this._httpRequest(uri);
 	}
