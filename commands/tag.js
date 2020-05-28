@@ -45,18 +45,21 @@ async function getArret(msg, ligne, arret, color){
 			.then(res => res.json());
 		if(!arretData.length) continue;
 		const hor = [];
-		for(const h of arretData[0].times){
-			const timeLeft = moment.duration(h.realtimeDeparture - cds, 's');
-			hor.push(`${daystampToString(h.realtimeDeparture)} (${timeLeft.minutes()}min${timeLeft.seconds()}s) [${h.realtime ? 'realtime' : 'scheduled'}]`);
-		}
+		for (const arret of arretData) {
+			if(!arret.pattern.id.startsWith(`SEM:${ligne}`)) continue;
+			for (const h of arret.times) {
+				const timeLeft = moment.duration(h.realtimeDeparture - cds, 's');
+				hor.push(`${daystampToString(h.realtimeDeparture)} (${timeLeft.minutes()}min${timeLeft.seconds()}s) [${h.realtime ? 'realtime' : 'scheduled'}]`);
+			}
 
-		const emb = new Discord.MessageEmbed()
-			.setColor(color)
-			.setTitle(`${ligne} \u2192 ${arretData[0].pattern.lastStopName}`)
-			.setDescription(`${hor.join('\n')}`)
-			.setAuthor(`${arretData[0].times[0].stopId} ${arretData[0].times[0].stopName}`)
-			.setFooter(`${moment().format('dddd DD-MM-YYYY HH:mm:ss')}`);
-		msg.channel.send(emb);
+			const emb = new Discord.MessageEmbed()
+				.setColor(color)
+				.setTitle(`${ligne} \u2192 ${arret.pattern.lastStopName}`)
+				.setDescription(`${hor.join('\n')}`)
+				.setAuthor(`${arret.times[0].stopId} ${arret.times[0].stopName}`)
+				.setFooter(`${moment().format('dddd DD-MM-YYYY HH:mm:ss')}`);
+			msg.channel.send(emb);
+		}
 	}
 }
 
