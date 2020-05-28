@@ -40,10 +40,10 @@ class RealmAPI{
 		const uri = `${this._endpoint}/pingjson`;
 		return this._httpRequest(uri);
 	}
-	request(req, args){
+	async request(req, args){
 		if(this.sessionExpired())
-			this.createSession();
-		return this[req](...args);
+			await this.createSession();
+		return await this[req](...args);
 	}
 	sessionExpired(){
 		return !this._sessionId || !this._sessionEnd || !this._sessionEnd.isValid() || moment.utc().isAfter(this._sessionEnd);

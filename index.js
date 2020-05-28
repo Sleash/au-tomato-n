@@ -12,7 +12,7 @@ const client = new Discord.Client(
 	});
 client.commands = new Discord.Collection();
 
-const {RealmAPI} = require('./realm.js');
+const {RealmAPI} = require('./realm/api.js');
 client.realmAPI = new RealmAPI();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -20,6 +20,8 @@ for(const file of commandFiles){
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
+
+client.realmPlayers = JSON.parse(fs.readFileSync('realm/players.json', 'utf8'));
 
 const cooldowns = new Discord.Collection();
 
