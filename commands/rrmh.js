@@ -19,7 +19,7 @@ module.exports = {
 		if(!mh.matches) return msg.channel.send('This player does not exist.');
 		if(!mh.matches.length) return msg.channel.send(`No matches found for player ${mh.name} (${mh.id}).`);
 
-		msg.channel.send(`Results for player ${r.name} (${r.id}).`);
+		msg.channel.send(`Results for player ${mh.name} (${mh.id}).`);
 		for(m of mh.matches.slice(0, nm)){
 			const kd = realmutils.kd(m.kills, m.deaths);
 			const emb = new Discord.MessageEmbed()

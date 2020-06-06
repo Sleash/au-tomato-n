@@ -4,7 +4,7 @@ module.exports = {
 	name: 'rrlm',
 	args: true,
 	async execute(msg, args){
-		const {realmAPI} = msg.client
+		const {realmAPI} = msg.client;
 		player = await realmutils.getPlayer(args.join(' '), msg.client);
 		if(!player) return msg.channel.send('Player not found.');
 
