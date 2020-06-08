@@ -12,15 +12,15 @@ module.exports = {
 		if(isNaN(nm)) nm = 3;
 		else args.shift();
 
-		player = await realmutils.getPlayer(args.join(' '), msg.client);
+		const player = await realmutils.getPlayer(args.join(' '), msg.client);
 		if(!player) return msg.channel.send('Player not found.');
 
 		const mh = await realmAPI.request('getPlayerMatchHistory', [player]);
-		if(!mh.matches) return msg.channel.send('This player does not exist.');
+		if(!mh.matches) return msg.channel.send(`Player ${player} does not exist.`);
 		if(!mh.matches.length) return msg.channel.send(`No matches found for player ${mh.name} (${mh.id}).`);
 
 		msg.channel.send(`Results for player ${mh.name} (${mh.id}).`);
-		for(m of mh.matches.slice(0, nm)){
+		for(const m of mh.matches.slice(0, nm)){
 			const kd = realmutils.kd(m.kills, m.deaths);
 			const emb = new Discord.MessageEmbed()
 				.setColor(realmutils.placementColor(m.placement))
