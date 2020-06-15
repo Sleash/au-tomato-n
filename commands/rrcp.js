@@ -19,7 +19,7 @@ module.exports = {
 			data.push(`${pr}${utils.toOrd(r)} : ${ranks[r]} point${(ranks[r] !== 1) ? 's' : ''}`);
 			precr = parseInt(r, 10);
 		}
-		data.push(`${ppk} points/kills (max ${maxKills} kills/match)`);
+		data.push(`${ppk} point${(ppk !== 1) ? 's' : ''}/kill (max ${maxKills} kill${(maxKills !== 1) ? 's' : ''}/match)`);
 		data.push('');
 
 		const idToName = {};
