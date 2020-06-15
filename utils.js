@@ -15,3 +15,9 @@ exports.randInt = i => Math.floor(Math.random() * Math.floor(i));
 exports.prob = (num, den) => (num > exports.randInt(den));
 
 exports.pad2 = n => (`0${n}`.slice(-2));
+
+exports.toOrd = n => (
+	(n%10 === 1 && n%100 !== 11) ? `${n}st` :
+	(n%10 === 2 && n%100 !== 12) ? `${n}nd` :
+	(n%10 === 3 && n%100 !== 13) ? `${n}rd` :
+	`${n}th`);

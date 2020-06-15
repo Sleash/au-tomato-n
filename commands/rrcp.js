@@ -1,3 +1,5 @@
+const utils = require('../utils.js');
+
 module.exports = {
 	name: 'rrcp',
 	args: true,
@@ -8,6 +10,17 @@ module.exports = {
 		const ranks = Object.fromEntries(args[0].split(',').map(x => x.split(':').map(x => parseInt(x, 10))));
 		const [ppk, maxKills] = args[1].split(',').map(x => parseInt(x, 10));
 		const matches = args[2].split(',');
+
+		const data = [];
+		data.push(`Points system used :`);
+		let precr = 0;
+		for(const r in ranks){
+			const pr = (precr+1 < r) ? `${utils.toOrd(precr+1)} - ` : '';
+			data.push(`${pr}${utils.toOrd(r)} : ${ranks[r]} point${(ranks[r] !== 1) ? 's' : ''}`);
+			precr = parseInt(r, 10);
+		}
+		data.push(`${ppk} points/kills (max ${maxKills} kills/match)`);
+		data.push('');
 
 		const idToName = {};
 		const teams = {};
@@ -38,7 +51,6 @@ module.exports = {
 		}
 		console.log(teams);
 		
-		const data = [];
 		let realRank = 0;
 		let standRank;
 		let precpoints = NaN;
