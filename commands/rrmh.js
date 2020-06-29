@@ -28,6 +28,7 @@ module.exports = {
 				.setDescription(`Placement : ${m.placement}\nKills : ${m.kills} Deaths : ${m.deaths} K/D : ${realmutils.kd(m.kills, m.deaths)}\nDamage : ${m.damage} DPK : ${realmutils.dpk(m.damage, m.kills)}\nTaken : ${m.damage_taken} Healing : ${m.healing_player_self}`)
 				.setAuthor(`${m.match_id}`)
 				.setFooter(`${m.match_datetime}`);
+				.setURL(`https://realmtracker.com/match/pc/${m.match_id}`);
 			msg.channel.send(emb);
 		}
 	}

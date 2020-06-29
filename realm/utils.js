@@ -12,11 +12,15 @@ exports.dpk = (d, k) => ((k === 0) ? '\u221E' : (d/k).toFixed(2));
 
 exports.getPlayer = async (p, client) => {
 	const {realmAPI, realmPlayers} = client;
+	const wtfp = `WTF ${p}`;
+	if(realmPlayers[wtfp]) return realmPlayers[wtfp];
 	if(realmPlayers[p]) return realmPlayers[p];
 	if(!isNaN(parseInt(p, 10))) return p;
+	const wtfps = await realmAPI.request('searchPlayers', [wtfp]);
+	if(wtfps.length) return wtfps[0].id;
 	const ps = await realmAPI.request('searchPlayers', [p]);
 	if(ps.length) return ps[0].id;
-}
+};
 
 exports.displayMatch = (m, channel) => {
 	if(!m.teams) return channel.send('This match does not exist.');
