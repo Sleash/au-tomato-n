@@ -37,7 +37,7 @@ module.exports = {
 					.setColor(realmutils.placementColor(cm.placement))
 					.setTitle(`[${cm.class_name}] ${p.name}`)
 					.setDescription(`Placement : ${cm.placement}\nKills : ${cm.kills} Deaths : ${cm.deaths} K/D : ${realmutils.kd(cm.kills, cm.deaths)}\nDamage : ${cm.damage} DPK : ${realmutils.dpk(cm.damage, cm.kills)}\nTaken : ${cm.damage_taken} Healing : ${cm.healing_player_self}`)
-					.setURL(`https://realmtracker.com/match/pc/${m.match_id}`);
+					.setURL(`https://realmtracker.com/match/pc/${m.match_id}`)
 				);
 			}
 			if(icm === -1) continue;
