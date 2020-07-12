@@ -5,11 +5,10 @@ module.exports = {
 	args: true,
 	usage: '<ranking points> <kills points> <matches>',
 	async execute(msg, args){
-		if(args.length !== 3) return;
+		if(args.length !== 2 && args.length !== 3) return;
 		
 		const ranks = Object.fromEntries(args[0].split(',').map(x => x.split(':').map(x => parseInt(x, 10))));
 		const [ppk, maxKills] = args[1].split(',').map(x => parseInt(x, 10));
-		const matches = args[2].split(',');
 
 		const data = [];
 		data.push(`Points system used :`);
@@ -20,7 +19,10 @@ module.exports = {
 			precr = parseInt(r, 10);
 		}
 		data.push(`${ppk} point${(ppk !== 1) ? 's' : ''}/kill (max ${maxKills} kill${(maxKills !== 1) ? 's' : ''}/match)`);
+
+		if(args.length === 2) return msg.channel.send(data, {split: true});
 		data.push('');
+		const matches = args[2].split(',');
 
 		const idToName = {};
 		const teams = {};
