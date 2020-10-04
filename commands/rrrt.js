@@ -10,8 +10,8 @@ module.exports = {
 		const sizeTeam = parseInt(params[0], 10);
 		if(sizeTeam < 1 || sizeTeam > 4) return;
 
-		const uniqueClass = params.includes('u');
-		const rClasses = params.includes('uc');
+		const uniqueClass = params.includes('uc');
+		const rClasses = params.includes('c');
 		const rWeapon = params.includes('w');
 		const rBuild = params.includes('b');
 		const rFull = params.includes('f');
@@ -43,7 +43,7 @@ module.exports = {
 			while(args.length && teammember < sizeTeam){
 				let p, c, w, w2, sa, oa, m, s;
 				p = args.splice(utils.randInt(args.length), 1);
-				if(rClasses || rFull){
+				if(rClasses){
 					do{ c = utils.randInt(4) } while(uniqueClass && (dclasses & (1 << c)));
 					dclasses |= 1 << c;
 				}
