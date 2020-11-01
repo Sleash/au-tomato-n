@@ -6,6 +6,11 @@ exports.placementColor = p => (
 	(p === 3) ? '#CD7F32' :
 	(p <= 10) ? '#0000A0' : '#A00000');
 
+exports.placementDisplay = p => (
+	(p === 1) ? ':first_place:' :
+	(p === 2) ? ':second_place:' :
+	(p === 3) ? ':third_place:' : `${p}`);
+
 exports.kd = (k, d) => ((d === 0) ? '\u221E' : (k/d).toFixed(2));
 
 exports.dpk = (d, k) => ((k === 0) ? '\u221E' : (d/k).toFixed(2));
