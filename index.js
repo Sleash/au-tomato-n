@@ -6,7 +6,9 @@ const fetch = require('node-fetch');
 
 const client = new Discord.Client(
 	{presence:
-		{activity:
+		{
+			status:'online',
+			activity:
 			{name: 'Realm Royale Koustoums'}
 		}
 	});
